@@ -21,18 +21,16 @@
 (define *zhou-chars* '(甚 刊))
 
 
-(define (rams-since-d0 y m d) ; -> integer?
-  ; y; m; d -> integer?
+(define (rams-since-d0 input-date) ; -> integer?
+  ; input-date -> date?
   ; Calculates the number of rams since day 0 of the dodecaphony, 9th Feb 2025
-  (let
-      ([input-date (date y m d)])
-      (if
-       (date>? input-date *day-0*)
-       (period->integer
-        (date-period-between
-         *day-0* input-date '(days))
-        'days)
-       (error (format "~a is not a valid date." input-date)))))
+  (if
+   (date>? input-date *day-0*)
+   (period->integer
+    (date-period-between
+     *day-0* input-date '(days))
+    'days)
+   (error (format "~a is not a valid date." input-date))))
 
 (define (subunits-since-value subunit rams) ; -> integer?
   ; subunit; rams -> integer?
@@ -44,18 +42,19 @@
         (else
       (add1 (floor (/ (modulo (- rams 1) *zhou*) subunit))))))
 
-(define (subunits-since-d0 subunit y m d) ; -> integer?
-  ; subunit; y; m; d -> integer?
+(define (subunits-since-d0 subunit input-date) ; -> integer?
+  ; subunit -> integer?
+  ; input-date -> date?
   ; Passes (rams-since-d0) into (subunits-since-value).
-  (subunits-since-value subunit (rams-since-d0 y m d)))
+  (subunits-since-value subunit (rams-since-d0 input-date)))
       
 
-(define (georgian->dodec-list y m d) ; -> list?
-  ; y; m; d -> integer?
+(define (georgian->dodec-list input-date) ; -> list?
+  ; input-date -> date?
   ; passes a georgian date into (subunits-since-0).
   ; outputs all 4 dodecaphony subunits in a list.
   (map (λ (subunit)
-         (subunits-since-d0 subunit y m d))
+         (subunits-since-d0 subunit input-date))
        (list *zhou* *trithing* *dodec* *ram*)))
        
 (define (dodec-list->char-list dodec-list)
@@ -105,10 +104,8 @@
             ram-char)))
 
 
-;; (subunits-since-d0 *ram* 2026 03 01)
-;; (rams-since-d0 2026 03 01)
-;; (georgian->dodec-list 2026 03 01)
-;; (map (λ (day) (georgian->dodec-list 2025 06 day))
-;;      (range 1 31))
-;; (dodec-list->char-list (georgian->dodec-list 2025 02 23))
-;; (pretty-print-dodec-list  (georgian->dodec-list 2025 02 23))
+;;(subunits-since-d0 *ram* (date 2026 03 01))
+;; (rams-since-d0 (date 2026 03 01))
+;; (georgian->dodec-list (date 2026 03 01))
+;; (dodec-list->char-list (georgian->dodec-list (date 2025 02 23)))
+(pretty-print-dodec-list (georgian->dodec-list (today)))

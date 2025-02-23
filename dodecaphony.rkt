@@ -95,10 +95,10 @@
        [trithing-char  (list-ref char-list 1)]
        [zhou-char      (list-ref char-list 0)])
     (printf "∎∎∎∎ ~a.~a.~a.~a ~a~a~a~a"
-            zhou
+            (pad-integer zhou 2)
             trithing
-            dodec
-            ram
+            (pad-integer dodec 2)
+            (pad-integer ram 2)
             zhou-char
             trithing-char
             dodec-char
@@ -111,4 +111,4 @@
 ;; (map (λ (day) (georgian->dodec-list 2025 06 day))
 ;;      (range 1 31))
 ;; (dodec-list->char-list (georgian->dodec-list 2025 02 23))
-(pretty-print-dodec-list  (georgian->dodec-list 2025 02 25))
+;; (pretty-print-dodec-list  (georgian->dodec-list 2025 02 23))
